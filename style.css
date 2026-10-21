@@ -130,7 +130,43 @@ p { font-size: clamp(1rem, 1.5vw, 1.25rem); font-family: 'Space Mono', monospace
 @keyframes swipeUp { 0% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-@media (max-width: 768px) {
+/* =========================================
+   MOBILE & TOUCH DEVICE OPTIMIZATIONS
+   ========================================= */
+@media (pointer: coarse), (max-width: 768px) {
+  
+  /* 1. Kill Custom Cursor & Restore Native Touch */
+  * { cursor: auto !important; }
+  .cursor-dot, .cursor-reticle, .hover-image-reveal { display: none !important; }
+  
+  /* 2. Fix HUD Overlap */
+  .hud-top-left { top: 1.5rem; left: 5vw; }
+  .hud-top-right { top: 1.5rem; right: 5vw; }
   .hud-bottom-left, .hud-bottom-right { display: none; }
-  .hover-image-reveal { display: none !important; }
+  
+  /* 3. Stack Layouts (Images on top, Text below) */
+  .flex-split { flex-direction: column; align-items: flex-start; gap: 2rem; }
+  .flex-split > div, .img-container { width: 100% !important; height: auto !important; aspect-ratio: 4/3; margin: 0 !important; }
+  
+  /* 4. Fix Typography Scaling & Overflow */
+  .massive-text { font-size: clamp(3.5rem, 15vw, 5rem) !important; word-break: break-word; line-height: 0.9; }
+  
+  /* 5. Fix Timeline Spacing */
+  .timeline section div { margin-left: 0 !important; margin-right: 0 !important; text-align: left !important; width: 100%; }
+  .timeline .massive-text.outline-text { top: 5%; font-size: 35vw !important; opacity: 0.15; }
+  
+  /* 6. Lifeforms Archive Mobile Layout */
+  .archive-row { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 2rem 0; }
+  .archive-row h2 { font-size: 2.5rem; }
+  .mobile-archive-img { 
+    display: block; width: 100%; height: 250px; 
+    object-fit: cover; margin-top: 1rem; 
+    filter: grayscale(100%); transition: filter 0.4s var(--ease-out); 
+  }
+  .archive-row:active .mobile-archive-img { filter: grayscale(0%); }
+}
+
+/* Ensure mobile injected images are hidden on Desktop */
+@media (min-width: 769px) {
+  .mobile-archive-img { display: none !important; }
 }
